@@ -5,13 +5,10 @@ import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import { syncHistoryWithStore } from 'react-router-redux';
 
-import reducer from './reducers';
-import routes from './Routes';
-
-import './index.scss';
+import reducer from './reducer';
+import routes from './routes';
 
 const store = createStore(reducer);
-
 const history = syncHistoryWithStore(browserHistory, store);
 
 render(
