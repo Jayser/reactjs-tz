@@ -10,7 +10,7 @@ import UsersList from '../UsersList';
 import UsersFilter from '../UsersFilter';
 import UsersPagination from '../UsersPagination';
 
-// TODO: change to CSS module way
+// TODO: Should be change to "CSS module" way
 import './UsersView.scss';
 
 class UsersView extends Component {
@@ -25,7 +25,7 @@ class UsersView extends Component {
 
     @autobind handleChangeRouteState({ page, sort, search }) {
         /*
-         * TODO: Should change current implementation to:
+         * TODO: Should be change current implementation to:
          * page=1&sortByField=lastName&sortType=alphabet&searchByField&searchQuery=query
          *
          * I think it's more useful
@@ -67,7 +67,16 @@ class UsersView extends Component {
     }
 
     render() {
-        const { users, actions } = this.props;
+        const {
+            users: {
+                activePage,
+                data,
+                sort,
+            },
+            actions: {
+                deleteUser
+            }
+        } = this.props;
 
         return (
             <section>
@@ -76,14 +85,14 @@ class UsersView extends Component {
                     handleClear={ this.handleFilterClear } />
                 <UsersList
                     className="users-list"
-                    activePage={ users.activePage }
-                    users={ users.data }
-                    sort={ users.sort }
+                    activePage={ activePage }
+                    users={ data }
+                    sort={ sort }
                     handleChangeRouteState={ this.handleChangeRouteState }
-                    deleteUser={ actions.deleteUser } />
+                    deleteUser={ deleteUser } />
                 <UsersPagination
-                    activePage={ users.activePage }
-                    items={ users.data.length }
+                    activePage={ activePage }
+                    items={ data.length }
                     handleChangeRouteState={ this.handleChangeRouteState } />
             </section>
         )

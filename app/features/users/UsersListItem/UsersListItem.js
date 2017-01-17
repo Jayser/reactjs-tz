@@ -8,16 +8,27 @@ export default class UsersListItem extends Component {
     };
 
     render() {
-        const { user } = this.props;
+        const {
+            user: {
+                firstName,
+                lastName,
+                email,
+                status,
+                id
+            },
+            deleteUser
+        } = this.props;
 
         return (
             <tr>
-                <td>{ user.firstName }</td>
-                <td>{ user.lastName }</td>
-                <td>{ user.email }</td>
-                <td className="text-center">{ user.status ? 'ACTIVE' : 'INACTIVE'}</td>
+                <td>{ firstName }</td>
+                <td>{ lastName }</td>
+                <td>{ email }</td>
                 <td className="text-center">
-                    <Button bsStyle="danger" onClick={ () => this.props.deleteUser(user.id) }>Delete</Button>
+                    { status ? 'ACTIVE' : 'INACTIVE'}
+                </td>
+                <td className="text-center">
+                    <Button bsStyle="danger" onClick={ () => deleteUser(id) }>Delete</Button>
                 </td>
             </tr>
         )

@@ -14,7 +14,14 @@ export default class UsersPagination extends Component {
     };
 
     render() {
-        const itemsPerPage = Math.ceil(this.props.items / this.props.perPage);
+        const {
+            activePage,
+            items,
+            perPage,
+            handleChangeRouteState
+        } = this.props;
+
+        const itemsPerPage = Math.ceil(items / perPage);
 
         return (
             <section className="text-center">
@@ -26,8 +33,8 @@ export default class UsersPagination extends Component {
                     ellipsis
                     boundaryLinks
                     items={ itemsPerPage }
-                    activePage={ this.props.activePage }
-                    onSelect={ page => this.props.handleChangeRouteState({ page }) } />
+                    activePage={ activePage }
+                    onSelect={ page => handleChangeRouteState({ page }) } />
             </section>
         )
     }
