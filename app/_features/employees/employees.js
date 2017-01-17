@@ -1,0 +1,1 @@
+export const ACTION_DELETE_EMPLOYEE = 'employees/employees-list/employees-delete';
