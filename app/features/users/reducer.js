@@ -81,7 +81,7 @@ export default (state = initialState, action) => {
         case types.DELETE_USER:
             return { ...state, data: state.data.filter(user => user.id !== action.id) };
 
-        case types.USER_PAGE:
+        case types.CHANGE_PAGE:
             return { ...state, activePage: action.page };
 
         case types.SEARCH_USER:

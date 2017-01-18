@@ -13,6 +13,8 @@ import UsersPagination from '../UsersPagination';
 // TODO: Should be change to "CSS module" way
 import './UsersView.scss';
 
+const USERS_PER_PAGE = 5;
+
 class UsersView extends Component {
     static propTypes = {
         users: PropTypes.object.isRequired,
@@ -20,10 +22,10 @@ class UsersView extends Component {
     };
 
     componentWillMount() {
-        this.handleChangeRouteState(browserHistory.getCurrentLocation().query);
+        this.changeRouteState(browserHistory.getCurrentLocation().query);
     }
 
-    @autobind handleChangeRouteState({ page, sort, search }) {
+    @autobind changeRouteState({ page, sort, search }) {
         /*
          * TODO: Should be change current implementation to:
          * page=1&sortByField=lastName&sortType=alphabet&searchByField&searchQuery=query
@@ -59,29 +61,25 @@ class UsersView extends Component {
     }
 
     @autobind handleFilterSearch(field, query) {
-        this.handleChangeRouteState({ search: { field, query } });
+        this.changeRouteState({ search: { field, query } });
     }
 
     @autobind handleFilterClear(field) {
-        this.handleChangeRouteState({ search: { field } });
-    }
-
-    getVisibilityUsers() {
-        return this.props.users.data.filter(({ visibility }) => visibility === true || visibility === undefined);
+        this.changeRouteState({ search: { field } });
     }
 
     render() {
         const {
             users: {
                 activePage,
+                data,
+                count,
                 sort,
             },
             actions: {
                 deleteUser
             }
         } = this.props;
-
-        const users = this.getVisibilityUsers();
 
         return (
             <section>
@@ -90,23 +88,34 @@ class UsersView extends Component {
                     handleClear={ this.handleFilterClear } />
                 <UsersList
                     className="users-list"
-                    activePage={ activePage }
-                    users={ users }
+                    users={ data }
                     sort={ sort }
-                    handleChangeRouteState={ this.handleChangeRouteState }
+                    changeRouteState={ this.changeRouteState }
                     deleteUser={ deleteUser } />
                 <UsersPagination
                     activePage={ activePage }
-                    items={ users.length }
-                    handleChangeRouteState={ this.handleChangeRouteState } />
+                    items={ count }
+                    onSelect={ this.changeRouteState } />
             </section>
         )
     }
 }
 
-const mapStateToProps = state => ({
-    users: state.users
-});
+const mapStateToProps = ({ users }) => {
+    const from = (users.activePage - 1) * USERS_PER_PAGE;
+    const to = from + USERS_PER_PAGE;
+    const visibilityUsers = users.data.filter(({ visibility }) => (
+        visibility === true || visibility === undefined
+    ));
+
+    return {
+        users: {
+            ...users,
+            data: visibilityUsers.slice(from, to),
+            count: visibilityUsers.length
+        }
+    }
+};
 
 const mapDispatchToProps = dispatch => ({
     actions: bindActionCreators(UserActions, dispatch)

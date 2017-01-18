@@ -39,7 +39,7 @@ export default class UsersFilter extends Component {
                 {' '}
                 <Button type="reset" onClick={ () => this.handleClear() }>X</Button>
                 {' '}
-                <Button bsStyle='primary' onClick={ (e) => this.handleSearch(e) }>Search</Button>
+                <Button bsStyle='primary' type="submit">Search</Button>
             </Form>
         )
     }

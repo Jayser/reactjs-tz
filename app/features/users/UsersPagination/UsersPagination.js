@@ -6,7 +6,7 @@ export default class UsersPagination extends Component {
         activePage: PropTypes.number.isRequired,
         perPage: PropTypes.number,
         items: PropTypes.number.isRequired,
-        handleChangeRouteState: PropTypes.func.isRequired
+        onSelect: PropTypes.func.isRequired
     };
 
     static defaultProps = {
@@ -18,7 +18,7 @@ export default class UsersPagination extends Component {
             activePage,
             items,
             perPage,
-            handleChangeRouteState
+            onSelect
         } = this.props;
 
         const itemsPerPage = Math.ceil(items / perPage);
@@ -34,7 +34,7 @@ export default class UsersPagination extends Component {
                     boundaryLinks
                     items={ itemsPerPage }
                     activePage={ activePage }
-                    onSelect={ page => handleChangeRouteState({ page }) } />
+                    onSelect={ page => onSelect({ page }) } />
             </section>
         )
     }
