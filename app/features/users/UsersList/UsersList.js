@@ -10,7 +10,7 @@ export default class UsersList extends Component {
     static propTypes = {
         activePage: PropTypes.number,
         className: PropTypes.string,
-        sort: PropTypes.string,
+        sort: PropTypes.object,
         perPage: PropTypes.number,
         users: PropTypes.array.isRequired,
         deleteUser: PropTypes.func.isRequired,
@@ -37,7 +37,11 @@ export default class UsersList extends Component {
     }
 
     renderIcon(name) {
-        return this.props.sort === name ? <Glyphicon glyph='sort-by-alphabet' /> : null;
+        if (this.props.sort && this.props.sort.field === name) {
+            return this.props.sort.type === 'asc' ? <Glyphicon glyph='sort-by-alphabet' /> : <Glyphicon glyph='sort-by-alphabet-alt' />
+        }
+
+        return null;
     }
 
     render() {

@@ -26,6 +26,47 @@ const initialState = {
     ]
 };
 
+function searchUser(user, { field, query }) {
+    const isStatus = field === 'status';
+    const actionQuery = query.toLowerCase();
+    let isShow;
+
+    if (isStatus) {
+        const isActive = user.status && 'active'.includes(actionQuery);
+        const isInactive = user.status === 0 && 'inactive'.includes(actionQuery);
+
+        isShow = isActive || isInactive;
+    } else {
+        isShow = user[field].toLowerCase().includes(actionQuery)
+    }
+
+    user.visibility = isShow;
+
+    return user;
+}
+
+function sortUser(state, { field }) {
+    let sortType = 'asc';
+
+    if (state.sort && state.sort.field === field) {
+        sortType = state.sort.type === 'asc' ? 'desc' : 'asc';
+    }
+
+    const sort = {
+        field: field,
+        type: sortType
+    };
+
+    return {
+        ...state,
+        sort,
+        data: state.data.sort((a, b) => {
+            const sortType = sort.type === 'desc' ? a[field] > b[field] : a[field] < b[field];
+            return sortType ? -1 : 1
+        })
+    }
+}
+
 export default (state = initialState, action) => {
     switch (action.type) {
         case types.CLEAR_SEARCH_FILTER:
@@ -44,33 +85,10 @@ export default (state = initialState, action) => {
             return { ...state, activePage: action.page };
 
         case types.SEARCH_USER:
-            return {
-                ...state,
-                data: state.data.map(user => {
-                    const isStatus = action.field === 'status';
-                    const query = action.query.toLowerCase();
-                    let isShow;
-
-                    if (isStatus) {
-                        isShow = user.status && 'active'.includes(query) || user.status === 0 && 'inactive'.includes(query)
-                    } else {
-                        isShow = user[action.field].toLowerCase().includes(query)
-                    }
-
-                    user.visibility = isShow;
-
-                    return user;
-                })
-            };
+            return { ...state, data: state.data.map(user => searchUser(user, action)) };
 
         case types.SORT_USER:
-            if (state.sort !== action.field) {
-                return {
-                    ...state,
-                    sort: action.field,
-                    data: state.data.sort((a, b) => a[action.field] < b[action.field] ? -1 : 1)
-                };
-            }
+            return sortUser(state, action);
 
         default:
             return state
