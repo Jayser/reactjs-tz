@@ -1,4 +1,5 @@
 import * as types from './actionTypes';
+import { LOCATION_CHANGE } from 'react-router-redux';
 
 const initialState = {
     activePage: 1,
@@ -77,6 +78,10 @@ export default (state = initialState, action) => {
                     return user;
                 })
             };
+
+        case LOCATION_CHANGE:
+            // TODO: it's temporal solution, it should be changed
+            return { ...state, activePage: Number(action.payload.query.page) || 1 };
 
         case types.DELETE_USER:
             return { ...state, data: state.data.filter(user => user.id !== action.id) };
