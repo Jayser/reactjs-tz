@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Table, Glyphicon } from 'react-bootstrap';
 
-import UsersListItem from '../UsersListItem/UsersListItem';
+import UsersListItem from './UsersListItem/UsersListItem';
 
 // TODO: Should be change to "CSS module" way
 import './UserList.scss';
@@ -23,7 +23,6 @@ export default class UsersList extends Component {
 
     renderUsers() {
         const { activePage, perPage, deleteUser } = this.props;
-
         const from = (activePage - 1) * this.props.perPage;
         const to = from + perPage;
         const users = this.props.users.slice(from, to);
@@ -32,8 +31,8 @@ export default class UsersList extends Component {
             return null;
         }
 
-        return users.map((user, id) => (
-            <UsersListItem key={ id } user={ { id, ...user } } deleteUser={ deleteUser } />
+        return users.map(user => (
+            <UsersListItem key={ user.id } user={ { ...user } } deleteUser={ deleteUser } />
         ));
     }
 

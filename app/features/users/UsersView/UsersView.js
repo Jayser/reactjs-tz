@@ -66,17 +66,22 @@ class UsersView extends Component {
         this.handleChangeRouteState({ search: { field } });
     }
 
+    getVisibilityUsers() {
+        return this.props.users.data.filter(({ visibility }) => visibility === true || visibility === undefined);
+    }
+
     render() {
         const {
             users: {
                 activePage,
-                data,
                 sort,
             },
             actions: {
                 deleteUser
             }
         } = this.props;
+
+        const users = this.getVisibilityUsers();
 
         return (
             <section>
@@ -86,13 +91,13 @@ class UsersView extends Component {
                 <UsersList
                     className="users-list"
                     activePage={ activePage }
-                    users={ data }
+                    users={ users }
                     sort={ sort }
                     handleChangeRouteState={ this.handleChangeRouteState }
                     deleteUser={ deleteUser } />
                 <UsersPagination
                     activePage={ activePage }
-                    items={ data.length }
+                    items={ users.length }
                     handleChangeRouteState={ this.handleChangeRouteState } />
             </section>
         )
